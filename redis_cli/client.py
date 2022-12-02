@@ -1,10 +1,10 @@
-import urllib.parse
-from urllib.parse import unquote
+from urllib.parse import ParseResult
 from urllib.parse import parse_qs
+from urllib.parse import unquote
 from urllib.parse import urlparse
-from redis.connection import to_bool
 
 import redis
+from redis.connection import to_bool
 
 URL_QUERY_ARGUMENT_PARSERS = {
     "db": int,
@@ -21,11 +21,13 @@ URL_QUERY_ARGUMENT_PARSERS = {
 }
 
 
-def parse_sentinel_url(url: urllib.parse.ParseResult):
+def parse_url(url: ParseResult):
     """
-    redis+sentinel://[username:password@]host[:port][,host2[:port2],...][/service_name[/db]][?param1=value1[&param2=value=2&...]]
-    :param url:
-    :return:
+    scheme://[username:password@]host[:port][,host2[:port2],...][/path[/path/...]][?param1=value1[&param2=value=2&...]]
+    :param url: redis url
+    :return hosts (host, port) tuple list
+    :return path_parts path fragment list
+    :return kwargs params dict
     """
     def parse_host(host_str):
         if ':' in host_str:
@@ -63,7 +65,7 @@ def parse_sentinel_url(url: urllib.parse.ParseResult):
     else:
         hostspec = netloc
 
-    sentinels = [parse_host(s) for s in hostspec.split(',')]
+    hosts = [parse_host(s) for s in hostspec.split(',')]
 
     # path
     if url.path:
@@ -72,6 +74,17 @@ def parse_sentinel_url(url: urllib.parse.ParseResult):
     else:
         path_parts = []
 
+    return hosts, path_parts, kwargs
+
+
+def parse_sentinel_url(url: ParseResult):
+    """
+    redis+sentinel://[username:password@]host[:port][,host2[:port2],...][/service_name[/db]][?param1=value1[&param2=value=2&...]]
+    :param url: sentinel url
+    :return sentinels
+    :return kwargs
+    """
+    sentinels, path_parts, kwargs = parse_url(url)
     # service_name
     if "service_name" not in kwargs and len(path_parts) > 0:
         kwargs["service_name"] = path_parts[0]
@@ -80,7 +93,6 @@ def parse_sentinel_url(url: urllib.parse.ParseResult):
         kwargs["db"] = path_parts[1]
 
     return sentinels, kwargs
-
 
 def init_from_url(url: str, **kwargs):
     """Init redis client from url.
@@ -128,8 +140,8 @@ class RedisWrapper:
     def init_from_sentinel(cls, sentinel_instance: redis.Sentinel, service_name, **kwargs):
         readonly = kwargs.pop("readonly", False)
         if readonly:
-            redis_instance = sentinel_instance.master_for(service_name, **kwargs)
-        else:
             redis_instance = sentinel_instance.slave_for(service_name, **kwargs)
+        else:
+            redis_instance = sentinel_instance.master_for(service_name, **kwargs)
 
         return cls(redis_instance=redis_instance)
