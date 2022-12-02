@@ -1,3 +1,4 @@
+import os
 from urllib.parse import ParseResult
 from urllib.parse import parse_qs
 from urllib.parse import unquote
@@ -103,6 +104,11 @@ def init_from_url(url: str, **kwargs):
     :param kwargs: additional redis client args
     :return:
     """
+    # support env var REDISCLI_AUTH
+    env_cli_auth = os.getenv("REDISCLI_AUTH")
+    if env_cli_auth:
+        kwargs["password"] = env_cli_auth
+
     url_parse = urlparse(url)
     if url_parse.scheme == "redis+sentinel":
         sentinels, connection_kwargs = parse_sentinel_url(url_parse)
