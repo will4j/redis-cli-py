@@ -7,9 +7,9 @@ def get_redis():
     return RedisWrapper.get_redis()
 
 
-def init_from_url(url, **kwargs):
-    return RedisWrapper.init_from_url(url, **kwargs)
-
-
 def init_from_redis(redis_instance: redis.Redis):
-    return RedisWrapper(redis_instance=redis_instance)
+    return RedisWrapper.init_from_redis(redis_instance)
+
+
+def init_from_sentinel(sentinel_instance: redis.Sentinel, service_name, **kwargs):
+    return RedisWrapper.init_from_sentinel(sentinel_instance, service_name, **kwargs)
