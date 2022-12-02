@@ -30,6 +30,7 @@ def parse_url(url: ParseResult):
     :return path_parts path fragment list
     :return kwargs params dict
     """
+
     def parse_host(host_str):
         if ':' in host_str:
             host, port = host_str.split(':', 1)
@@ -95,6 +96,7 @@ def parse_sentinel_url(url: ParseResult):
 
     return sentinels, kwargs
 
+
 def init_from_url(url: str, **kwargs):
     """Init redis client from url.
     support scheme:
@@ -104,6 +106,11 @@ def init_from_url(url: str, **kwargs):
     :param kwargs: additional redis client args
     :return:
     """
+    # prefer env var REDISCLI_URL
+    env_cli_url = os.getenv("REDISCLI_URL")
+    if env_cli_url:
+        url = env_cli_url
+
     # support env var REDISCLI_AUTH
     env_cli_auth = os.getenv("REDISCLI_AUTH")
     if env_cli_auth:
@@ -126,13 +133,13 @@ class RedisWrapper:
     # borg pattern
     _shared_state = {}
 
-    def __init__(self, redis_instance=None):
+    def __init__(self, redis_instance: redis.Redis = None):
         self.__dict__ = self._shared_state
         if redis_instance is not None:
             self.redis = redis_instance
 
     @classmethod
-    def get_redis(cls):
+    def get_redis(cls) -> redis.Redis:
         new_instance = cls()
         if not hasattr(new_instance, "redis"):
             raise RuntimeError("Redis not inited, see redis_cli.init_from_* method.")
