@@ -1,0 +1,4 @@
+cachetools
+coverage
+pytest
+redis
