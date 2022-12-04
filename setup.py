@@ -17,7 +17,7 @@ setup(
     author_email="williamw0825@gmail.com",
     python_requires=">=3.7",
     install_requires=[
-        "redis>=4.3.5",
+        "redis>=4",
     ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
