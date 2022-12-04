@@ -1,0 +1,27 @@
+# https://packaging.python.org/en/latest/tutorials/packaging-projects/
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "redis-cli"
+version = "0.1.1"
+authors = [
+  { name="William Wang", email="williamw0825@gmail.com" },
+]
+description = "A Redis Python Client"
+keywords = ["Redis", "Python", "client"]
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "redis>=4",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/will4j/redis-cli-py"
+"Bug Tracker" = "https://github.com/will4j/redis-cli-py/issues"

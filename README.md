@@ -17,7 +17,7 @@ b'bar'
 
 ### Initialization
 **TIPS**: Both Redis and Sentinel actually use connectionpool internel, so do not bother with connectionpool.  
-**NOTICE**: You can init redis_cli multiple times，but only one shared Redis instance will exists.
+**NOTICE**: You can init redis_cli multiple times, but only one shared Redis instance will exists.
 #### from existing redis instance
 ```python
 import redis_cli
@@ -33,7 +33,7 @@ redis_cli.init_from_sentinel(s, 'mymaster')
 ```
 #### from url
 Scheme redis/rediss/unix will delegate to redis.from_url.  
-Scheme redis+sentinel will be parsed, return master Redis (which can both read & write) or slave Redis (which is readonly)，according to url param `readonly` (default false).
+Scheme redis+sentinel will be parsed, return master Redis (which can both read & write) or slave Redis (which is readonly),according to url param `readonly` (default false).
 ```python
 import redis_cli
 
