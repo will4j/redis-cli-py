@@ -47,7 +47,8 @@ redis_cli.init_from_url('redis-sentinel://username:password@host1:1,host2,host3:
 ```
 
 #### with env variables
-This could be useful when deploy apps in kubernetes environment.
+This could be useful when deploy apps in kubernetes environment.  
+**NOTICE**: `password` from url has the highest priority, then from env `REDISCLI_AUTH`. 
 ```bash
 export REDISCLI_URL='redis-sentinel://host:26379/mymaster/0'
 export REDISCLI_AUTH='complicated#pass'

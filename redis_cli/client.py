@@ -122,7 +122,7 @@ def init_from_url(url: str, **kwargs):
         if "service_name" not in connection_kwargs:
             raise ValueError("Require param service_name for sentinel connection.")
         service_name = connection_kwargs.pop("service_name")
-        sentinel = redis.Sentinel(sentinels, **connection_kwargs)
+        sentinel = redis.Sentinel(sentinels, **kwargs)
         RedisWrapper.init_from_sentinel(sentinel, service_name, **connection_kwargs)
     else:
         redis_instance = redis.from_url(url, **kwargs)
