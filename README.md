@@ -2,6 +2,21 @@
 Another redis python client :) redis-cli-py provides friendly access to redis (on both normal python apps and kubernetes apps), separating initialization and keys operation with borg pattern.  
 You will have full features of official [redis-py](https://github.com/redis/redis-py), for the principle of this client is focusing on init, the interface you actually work with **IS** class *Redis* itself from redis-py, without wrapping, which will compatible with multiple versions of redis-py, including these in the future.
 
+## Installation
+### use pip
+```bash
+$ pip install redis-cli
+```
+### use git repository
+```text
+# this is requirements.txt
+# git+https://gitee.com/will4j/redis-cli-py.git@main#egg=redis-cli
+git+https://github.com/will4j/redis-cli-py.git@main#egg=redis-cli 
+```
+```bash
+$ pip install -r requirements.txt
+```
+
 ## Usage
 ### Basic example
 ```bash
