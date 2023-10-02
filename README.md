@@ -74,6 +74,36 @@ import redis_cli
 redis_cli.init_from_url('redis://:password@localhost:6379/0')
 ```
 
+#### kubernetes example
+Create a redis auth config secret:
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: redis-auth-conf-secret
+type: Opaque
+data:
+  REDISCLI_URL: "redis-sentinel://host:26379/mymaster/0" # base64
+  REDISCLI_AUTH: "complicated#pass" # base64
+```
+Mount environment variable in deployment config:
+```yaml
+# ...
+containers:
+  - name: your container
+    # ...
+    envFrom:
+      - secretRef:
+          name: redis-auth-conf-secret
+# ...
+```
+Then init redis at app startup:
+```python
+import redis_cli
+redis_cli.init_from_url('redis://:password@localhost:6379/0')
+```
+The redis url in your code could be dev url or whatever, the final redis auth config will be `REDISCLI_URL` and `REDISCLI_AUTH` in `redis-auth-conf-secret`.
+
 ### Operation
 `get_redis()` returns shared Redis instance Based on how you init redis_cli, could be normal Redis, master Redis or slave Redis of sentinel.
 
