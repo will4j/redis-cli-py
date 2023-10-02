@@ -70,7 +70,7 @@ export REDISCLI_AUTH='complicated#pass'
 ```
 ```python
 import redis_cli
-# env REDISCLI_URL or REDISCLI_AUTH will take over
+# above env REDISCLI_URL and REDISCLI_AUTH will take over
 redis_cli.init_from_url('redis://:password@localhost:6379/0')
 ```
 

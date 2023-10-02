@@ -3,7 +3,7 @@ import redis
 from redis_cli.client import RedisWrapper
 
 
-def get_redis():
+def get_redis() -> redis.Redis:
     return RedisWrapper.get_redis()
 
 
